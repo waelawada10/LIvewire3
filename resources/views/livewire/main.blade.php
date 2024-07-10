@@ -4,5 +4,8 @@
 
     @livewire('todo-list')
 
+    @livewire('register-form')
+
+
    
 </div>

@@ -1,6 +1,8 @@
 <div>
 
     <h1 class="text-center mt-5 mb-5">Chapter <span class="text-danger">#2</span></h1>
+    <h3 class="text-center mt-5 mb-5">To-do List</h3>
+
 
     <div class="d-flex justify-content-center mb-5" >
 
@@ -10,6 +12,10 @@
 
                 @if(session('success'))
                     <span class="text-success">{{session('success')}}</span>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger" role="alert">{{session('error')}}</div>
                 @endif
                 <h1>Create To-Do List</h1>
                 <div class="mb-3" >
@@ -31,17 +37,39 @@
 
                 <div>
                     @foreach($todos as $index => $todo) 
-                        <div wire:key="{{$todo->id}}" class=" mt-2 mb-2 pt-2 pb-2 d-flex  ">
-                            
+                        <div wire:key="{{$todo->id}}" class=" mt-2 mb-2 pt-2 pb-2 d-flex">
+
+                        @if($todo->completed)
+                            <input wire:click="completed({{$todo->id}})" class="form-check-input me-2" type="checkbox" checked>
+                        @else
+                            <input wire:click="completed({{$todo->id}})" class="form-check-input me-2" type="checkbox">
+                        @endif
+
+                        @if($editingTodoId === $todo->id )
+
+                        <div>
+                            <input wire:model="editingTodoName"  class="form-control" type="text">
+                            @error('editingTodoName') <span class="text-danger">{{$message}}</span> @enderror
+                        </div>
+
+                        @else
                             <div>{{$index + 1}} - {{$todo->name}} : {{$todo->created_at->format('d M')}}</div>
-                            <div class="ms-3 me-3" style="cursor: pointer;color:#F7D100;font-size:24px"><i class="bi bi-pencil-square"></i></div>
+                        @endif
+                            <div wire:click="edit({{$todo->id}})" class="ms-3 me-3" style="cursor: pointer;color:#F7D100;font-size:24px"><i class="bi bi-pencil-square"></i></div>
                             <div wire:click="delete({{$todo->id}})" class="ms-3 me-3" style="cursor: pointer;color:red;font-size:24px"><i class="bi bi-trash"></i></div>
                         
                         </div> 
+
+                        @if($editingTodoId === $todo->id )
+                        <button wire:click="update()" class="btn btn-success">Update</button>
+                        <button wire:click="cancelEdit()" class="btn btn-danger">Cancel</button>
+                        @endif
+
                         @endforeach
                     <div>{{ $todos->links() }}</div>
 
                 </div>
+
 
             </div>
 
@@ -49,5 +77,8 @@
 
 
     </div>
+
+
+
 
 </div>
