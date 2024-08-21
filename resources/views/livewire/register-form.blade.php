@@ -58,7 +58,7 @@
 
             </form>
         </div>
-        <button type="button" @click="$dispatch('wael')">reload</button>
+        <button class="btn btn-secondary" type="button" @click="$dispatch('wael')">DD</button>
     </div>
 
 
